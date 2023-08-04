@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Self-driving car</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <div class="bg-dark m-0 vw-100 vh-100 d-flex justify-content-center">
+        <canvas id="gameCanvas" class="mx-4"></canvas>
+        <canvas id="networkCanvas" class="mx-4"></canvas>
+        <div id="settingsPanel"
+            class="m-5 p-3 bg-secondary-subtle rounded d-flex flex-column align-items-start justify-content-start">
+            <h2>Settings ⚙</h2>
+            <div class="d-flex flex-column justify-content-start align-items-start my-2">
+                <h4>Brain Save 🧠</h4>
+                <div>
+                    <select id="brainSaves" class="form-select" onchange="changeBrain()">
+                    </select>
+                </div>
+                <div class="btn-group-vertical my-1">
+                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">New Brain
+                        ➕</button>
+                    <button onclick="resetBrain()" class="btn btn-light">Reset Brain 🔃</button>
+                    <button onclick="deleteBrain()" class="btn btn-light">Delete Brain 🗑</button>
+                    <button onclick="clearBrains()" class="btn btn-light">Clear Brains 🧹</button>
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-start justify-content-start my-2">
+                <h4>GamePlay 🎮</h4>
+                <div class="py-2 fw-bold">
+                    <input type="checkbox" class="form-check-input me-2" id="autoRestartCheckbox">
+                    <label class="form-check-label" for="autoRestartCheckbox">Auto-Restart</label>
+                </div>
+                <div class="py-2 fw-bold">
+                    <input type="checkbox" class="form-check-input me-2" id="autoChangeCheckbox">
+                    <label class="form-check-label" for="autoChangeCheckbox">Auto-Change-Car</label>
+                </div>
+                <div class="py-2 fw-bold">
+                    <input type="checkbox" class="form-check-input me-2" id="autoSaveCheckbox">
+                    <label class="form-check-label" for="autoSaveCheckbox">Auto-Save</label>
+                </div>
+                <div class="py-2 fw-bold">
+                    <input type="checkbox" class="form-check-input me-2" id="timerCheckbox" onchange="startTimer()">
+                    <label class="form-check-label" for="timerCheckbox">Timer</label>
+                </div>
+                <div class="form-floating my-2">
+                    <input type="number" class="form-control" id="resetGameAt" value="20">
+                    <label for="resetTimeSetting">Reset at (seconds)</label>
+                </div>
+                <div class="form-floating my-2">
+                    <input type="number" class="form-control" id="aiCars" value="100">
+                    <label for="aiCars">Number of Self-Driving Cars</label>
+                </div>
+                <div class="btn-group my-2">
+                    <button class="btn btn-light" onclick="nextOrPreviousCar(false)"><i
+                            class="bi bi-arrow-left"></i></button>
+                    <button class="btn btn-light disabled" id="carId">0</button>
+                    <button class="btn btn-light" onclick="nextOrPreviousCar(true)"><i
+                            class="bi bi-arrow-right"></i></button>
+                </div>
+                <button onclick="save()" class="btn btn-light mt-2">Save Car Brain 💾</button>
+                <button onclick="init()" class="btn btn-light my-2">Restart Game 🔄</button>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New Brain</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="m-1">
+                            <label class="form-label" for="brainSaveName">Name of brain save</label>
+                            <input class="form-control" id="brainSaveName" type="text" placeholder="Default">
+                        </div>
+                        <div class="m-1">
+                            <label class="form-label" for="numOfRays">Number of (sensor) rays</label>
+                            <input class="form-control" id="numOfRays" type="number" value="5">
+                        </div>
+                        <div class="m-1">
+                            <label class="form-label" for="numOfLayers">Number of layers</label>
+                            <input class="form-control" id="numOfLayers" type="number" value="1">
+                        </div>
+                        <div class="m-1">
+                            <label class="form-label" for="numOfNeurons">Number of neurons per layer</label>
+                            <input class="form-control" id="numOfNeurons" type="number" value="6">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            onclick="createBrain()">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="scripts/network.js"></script>
+        <script src="scripts/visualizer.js"></script>
+        <script src="scripts/sensor.js"></script>
+        <script src="scripts/utils.js"></script>
+        <script src="scripts/road.js"></script>
+        <script src="scripts/controls.js"></script>
+        <script src="scripts/car.js"></script>
+        <script src="main.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    </div>
+</body>
+
+</html>

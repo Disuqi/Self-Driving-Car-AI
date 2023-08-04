@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    background: #242424;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#networkCanvas {
+    background-color: black;
+}
