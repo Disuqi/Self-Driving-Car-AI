@@ -33,9 +33,7 @@ const numOfNeurons = document.getElementById("numOfNeurons");
 gameplayCanvas.width = 200;
 networkCanvas.width = 600;
 
-if (localStorage.length == 0) {
-    localStorage.setItem(0, JSON.stringify(new BrainSave(0, "Default", new NeuralNetwork([5, 5, 4]), 0)));
-}
+checkLocalStorage();
 let currentBrainSave = JSON.parse(localStorage.getItem(0));
 
 const road = new Road(gameplayCanvas.width / 2, gameplayCanvas.width * 0.9);
@@ -71,6 +69,17 @@ brainsDropdown.value = 0;
 
 init();
 update();
+
+function checkLocalStorage()
+{
+    if(localStorage.length > 0 && localStorage.getItem(0) == null) {
+        localStorage.clear();
+    }
+    
+    if (localStorage.length == 0) {
+        localStorage.setItem(0, JSON.stringify(new BrainSave(0, "Default", new NeuralNetwork([5, 5, 4]), 0)));
+    }
+}
 
 function createBrain() {
     if(brainSaveName.value == "") {
@@ -144,9 +153,7 @@ function resetBrain() {
 
 function deleteBrain() {
     localStorage.removeItem(currentBrainSave.key);
-    if (localStorage.length == 0) {
-        localStorage.setItem(0, JSON.stringify(new BrainSave(0, "Default", new NeuralNetwork([5, 5, 4]), 0)));
-    }
+    checkLocalStorage();
     currentBrainSave = JSON.parse(localStorage.getItem(0));
     brainSaves = [];
     brainsDropdown.innerHTML = "";
